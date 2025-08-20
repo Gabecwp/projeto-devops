@@ -1,17 +1,21 @@
-name: Continuous Integration Workflow
+name: "CodeQL"
+
 on:
+  push:
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  build:
+  analyze:
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-        
-      - name: Python Lint Code Scanning Action
-        uses: advanced-security/python-lint-code-scanning-action@v1.1.1
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
         with:
-          linter: pylint
+          languages: python
+      - uses: github/codeql-action/analyze@v3
